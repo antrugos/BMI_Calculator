@@ -3,43 +3,43 @@ import "./index.css";
 
 function App() {
   // State
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [bmi, setBmi] = useState("");
-  const [message, setMessage] = useState("");
+  const [peso, setPeso] = useState();
+  const [altura, setAltura] = useState();
+  const [imc, setImc] = useState("");
+  const [mensage, setMensage] = useState("");
 
-  let calcBmi = (e) => {
-    // Se previende de un envio
+  let calcImc = (e) => {
+    // Se previene de un envio
     e.preventDefault();
-    if (weight === 0 || height === 0) {
+    if (peso === 0 || altura === 0) {
       alert("please, enter a valid value!! ");
     } else {
-      let imc = weight / (height * height);
-      setBmi(imc.toFixed(1));
+      let imc = peso / (altura * altura);
+      setImc(imc.toFixed(1));
 
       // Mesagge
       if (imc < 18.5) {
-        setMessage("Underweight");
-      } else if (imc >= 18.5 && imc <= 24.9) {
-        setMessage("Normal and Healthy weight");
-      } else if (imc > 24.9 && imc <= 29.9) {
-        setMessage("Overweight");
+        setMensage("Bajo peso");
+      } else if (imc >= 18.5 && imc < 24.9) {
+        setMensage("Peso normal and saludable");
+      } else if (imc >= 24.9 && imc < 29.9) {
+        setMensage("Sobrepeso");
       } else {
-        setMessage("Obesity");
+        setMensage("Obesidad");
       }
     }
   };
 
-  // Show the image based on calculo IMC
+  // Muestra la imagen basada en el calculo de IMC
   let imgSrc;
 
-  if (bmi < 1) {
+  if (imc < 1) {
     imgSrc = null;
-  } else if (bmi < 18.5) {
+  } else if (imc < 18.5) {
     imgSrc = require("../src/assets/underweight.png");
-  } else if (bmi >= 18.5 && bmi <= 24.9) {
+  } else if (imc >= 18.5 && imc < 24.9) {
     imgSrc = require("../src/assets/healthy.png");
-  } else if (bmi > 24.9 && bmi <= 29.9) {
+  } else if (imc >= 25 && imc < 29.9) {
     imgSrc = require("../src/assets/overweight.png");
   } else {
     imgSrc = require("../src/assets/obesity.png");
@@ -52,37 +52,45 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h2 className="center">BMI Calculator</h2>
-        <form onSubmit={calcBmi}>
+        <h2 className="center">Calculadora IMC</h2>
+        <form onSubmit={calcImc}>
           <div>
-            <label> Weight (Kg)</label>
+            <label> Peso (Kg)</label>
             <input
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              value={peso}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                const numericValue = inputValue.replace(/[^0-9]/g, "");
+                setPeso(numericValue);
+              }}
               placeholder="0"
             />
           </div>
           <div>
-            <label> Height (Meters)</label>
+            <label> Altura (Metros)</label>
             <input
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
+              value={altura}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                const numericValue = inputValue.replace(/[^0-9.]/g, "");
+                setAltura(numericValue);
+              }}
               placeholder="0"
             />
           </div>
           <div>
             <button className="btn" type="submit">
-              submit
+              Enviar
             </button>
             <button className="btn btn-outline" type="submit" onClick={reload}>
-              Reload
+              Recargar
             </button>
           </div>
         </form>
 
         <div className="center">
-          <h3> Your BMI is: {bmi}</h3>
-          <p>{message}</p>
+          <h3> Tu IMC es: {imc}</h3>
+          <p>{mensage}</p>
         </div>
 
         <div className="img-container">
